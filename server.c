@@ -26,11 +26,14 @@ int main(int argc, char **argv)
 	printf("Hello World from server! \n");
 
 	while (1) {
+		printf("inside the loop from server \n");
 		clientlen = sizeof(struct sockaddr_storage); /* Important! */
 		connfd = accept(listenfd, (SA *)&clientaddr, &clientlen);
 		getnameinfo((SA *) &clientaddr, clientlen,
 		client_hostname, MAXLINE, client_port, MAXLINE, 0);
 		printf("Connected to (%s, %s)\n", client_hostname, client_port);
+
+
 		echo(connfd);
 		close(connfd);
 	}

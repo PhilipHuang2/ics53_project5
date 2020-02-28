@@ -21,6 +21,7 @@ int main(int argc, char **argv)
 	port = argv[2];
 
 	//printf("Hello World from client! \n");
+	printf("host:%s , port:%s \n", host, port);
 
 	clientfd = open_clientfd(host, port);
 	while (fgets(buf, MAXLINE, stdin) != NULL) {
@@ -46,12 +47,17 @@ int open_clientfd(char *hostname, char *port) {
 	for (p = listp; p; p = p->ai_next) {
 		/* Create a socket descriptor */
 		if ((clientfd = socket(p->ai_family, p->ai_socktype,
-		p->ai_protocol)) < 0)
+		p->ai_protocol)) < 0){
+			printf("Socket failed, try the next\n");
 			continue; /* Socket failed, try the next */
+		}
 		/* Connect to the server */
-		if (connect(clientfd, p->ai_addr, p->ai_addrlen) != -1)
+		if (connect(clientfd, p->ai_addr, p->ai_addrlen) != -1){
+			printf("Connected to the server from Client\n");
 			break; /* Success */
+		}
 		close(clientfd); /* Connect failed, try another */
+		printf("Connect failed, try another\n");
 	}
 	/* Clean up */
 	freeaddrinfo(listp);
